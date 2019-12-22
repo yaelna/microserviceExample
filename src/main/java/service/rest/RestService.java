@@ -27,4 +27,11 @@ public class RestService {
         return Response.status(200).entity(service.toUpper(msg)).build();
     }
 
+    @GET
+    @Path("/health")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response healthCheck() {
+        return Response.status(200).entity("OK").build();
+    }
+
 }

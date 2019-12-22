@@ -59,7 +59,7 @@ public class KafkaProcessor implements Runnable {
         props.put(StreamsConfig.CLIENT_ID_CONFIG, "Hello-Service-Client");
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "micro-services");
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "Hello-App");
-        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka-server.service.consul:9092");
         props.put(StreamsConfig.REPLICATION_FACTOR_CONFIG, 1);
         props.put(StreamsConfig.DEFAULT_TIMESTAMP_EXTRACTOR_CLASS_CONFIG, WallclockTimestampExtractor.class);
         return props;

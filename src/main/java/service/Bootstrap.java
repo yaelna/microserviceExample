@@ -12,23 +12,32 @@ import service.rest.RestService;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Logger;
 
 public class Bootstrap {
+    static Logger logger = Logger.getLogger("upperCaseService");
     private static ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public static void main(String[] args) throws Exception {
         UpperCaseService service = new UpperCaseImpl();
         Server jettyServer = initRestServer(service);
         Runnable kafkaProcessor = new KafkaProcessor(service);
+//        ConsulUtils.registerWithConsul();
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> close(jettyServer)));
 
         try {
             executorService.submit(kafkaProcessor);
             jettyServer.start();
             jettyServer.join();
         } finally {
-            executorService.shutdownNow();
-            jettyServer.destroy();
+            close(jettyServer);
         }
+    }
+
+    private static void close(Server jettyServer) {
+//        ConsulUtils.deregisterFromConsul();
+        executorService.shutdownNow();
+        if (jettyServer.isRunning()) jettyServer.destroy();
     }
 
     private static Server initRestServer(UpperCaseService service) {
